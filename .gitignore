@@ -1,4 +1,5 @@
 *.Rhistory
 *.pyc
 raw_data
+zillow
 api_key.txt
