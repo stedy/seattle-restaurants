@@ -1,3 +1,4 @@
+*.db
 *.Rhistory
 *.pyc
 raw_data

@@ -33,6 +33,12 @@ for(hood in my.sub$NAME){
   all.matches <- rbind(all.matches, temp.match)
 } 
 
-
+#plot out points for quick overview
 sp::plot(my.sub)
 points(df.points$Latitude ~ df.points$Longitude, col = "red", cex = 1)
+
+summary.count <- data.frame(table(all.matches$neighborhood))
+names(summary.count) <- c('neighborhood', 'count')
+summary.count$date <- "2015-01-30"
+dbWriteTable(conn, "Neighborhood_count", summary.count, append = T, row.names = F)
+dbDisconnect(conn)
