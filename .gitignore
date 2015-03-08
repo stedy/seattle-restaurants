@@ -1,0 +1,4 @@
+*.Rhistory
+*.pyc
+raw_data
+api_key.txt
