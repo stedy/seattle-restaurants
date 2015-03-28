@@ -40,10 +40,14 @@ def main():
         location = geolocator.geocode(place + " Seattle, WA")
         latlong.append(location.latitude)
         print (location.latitude, location.longitude)
-        cur.execute("""INSERT into Restaurants (Name, Latitude,
-        Longitude, NAICStype, entrydate) VALUES (?,?,?,?,?)""",
-        [name, location.latitude, location.longitude, NAICStype, "2015-01-30"])
-        db.commit()
+        if cur.execute("""SELECT Name FROM Restaurants WHERE Name == ?""",
+                [Name]) is None:
+            cur.execute("""INSERT into Restaurants (Name, Latitude,
+                        Longitude, NAICStype, entrydate) VALUES (?,?,?,?,?)""",
+                [name, location.latitude, location.longitude, NAICStype, "2015-01-30"])
+            db.commit()
+        else:
+            pass
 
     results = zip(names, address, latlong)
     for x in results:
