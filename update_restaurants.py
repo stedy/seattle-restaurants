@@ -2,6 +2,7 @@ import BeautifulSoup as bs4
 import re
 import argparse
 import sqlite3
+import os
 from geopy.geocoders import OpenCage
 
 def main():
@@ -19,6 +20,11 @@ def main():
 
     page = file(url).read()
     soup = bs4.BeautifulSoup(page)
+
+    chars_to_remove = ['DP', 'FSR', 'LSR', 'MFS', 'breweries', '.aspx']
+
+    filename = os.path.basename(url)
+    filedate = filename.translate(None, ''.join(chars_to_remove)).lstrip('-')
 
     names, address = [], []
     for s in soup.findAll('span', {'id' : re.compile("lblTradeName")}):
@@ -39,14 +45,16 @@ def main():
     for name, place in zip(names, address):
         location = geolocator.geocode(place + " Seattle, WA")
         latlong.append(location.latitude)
-        print (location.latitude, location.longitude)
         if cur.execute("""SELECT Name FROM Restaurants WHERE Name == ?""",
-                [Name]) is None:
+                [name]) is None:
+            print (location.latitude, location.longitude)
             cur.execute("""INSERT into Restaurants (Name, Latitude,
                         Longitude, NAICStype, entrydate) VALUES (?,?,?,?,?)""",
-                [name, location.latitude, location.longitude, NAICStype, "2015-01-30"])
+                [name, location.latitude, location.longitude, NAICStype,
+                    filedate])
             db.commit()
         else:
+            print "%s already exists in db" % name
             pass
 
     results = zip(names, address, latlong)
