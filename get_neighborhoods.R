@@ -1,6 +1,4 @@
 library(RSQLite)
-library(ggmap)
-library(ggplot2)
 library(sp)
 
 conn <- dbConnect(SQLite(), "restaurants.db")
@@ -37,8 +35,14 @@ for(hood in my.sub$NAME){
 sp::plot(my.sub)
 points(df.points$Latitude ~ df.points$Longitude, col = "red", cex = 1)
 
-summary.count <- data.frame(table(all.matches$neighborhood))
-names(summary.count) <- c('neighborhood', 'count')
-summary.count$date <- "2015-01-30"
-dbWriteTable(conn, "Neighborhood_count", summary.count, append = T, row.names = F)
-dbDisconnect(conn)
+#then calculate statistics
+neighborhoods <- unique(all.matches$neighborhood)
+summary.count <- c()
+for(hood in neighborhoods){
+  hood.results <- subset(all.matches, neighborhood == hood)
+  counts <- data.frame(table(hood.results$entrydate))
+  counts$neighborhood <- hood
+  summary.count <- rbind(summary.count, counts)
+}
+
+

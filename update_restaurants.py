@@ -45,16 +45,13 @@ def main():
     for name, place in zip(names, address):
         location = geolocator.geocode(place + " Seattle, WA")
         latlong.append(location.latitude)
-        cur.execute("""SELECT Name FROM Restaurants WHERE Name == ?""",
-            (name,))
-        if len(cur.fetchall()) == 0:
-            print name
-            print (location.latitude, location.longitude)
-            cur.execute("""INSERT into Restaurants (Name, Latitude,
+        print name
+        print (location.latitude, location.longitude)
+        cur.execute("""INSERT into Restaurants (Name, Latitude,
                         Longitude, NAICStype, entrydate) VALUES (?,?,?,?,?)""",
                 [name, location.latitude, location.longitude, NAICStype,
                     filedate])
-            db.commit()
+        db.commit()
 
 if __name__ == '__main__':
     main()
