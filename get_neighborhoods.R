@@ -31,18 +31,7 @@ for(hood in my.sub$NAME){
   all.matches <- rbind(all.matches, temp.match)
 } 
 
-#plot out points for quick overview
-sp::plot(my.sub)
-points(df.points$Latitude ~ df.points$Longitude, col = "red", cex = 1)
 
 #then calculate statistics
-neighborhoods <- unique(all.matches$neighborhood)
-summary.count <- c()
-for(hood in neighborhoods){
-  hood.results <- subset(all.matches, neighborhood == hood)
-  counts <- data.frame(table(hood.results$entrydate))
-  counts$neighborhood <- hood
-  summary.count <- rbind(summary.count, counts)
-}
-
-
+all.counts <- plyr::ddply(all.matches, c('neighborhood', 'NAICStype', 'entrydate'), function(x) data.frame(count=length(unique(x$Name))))
+all.diffs <- plyr::ddply(all.counts, c('neighborhood', 'NAICStype'), function(x) data.frame(absdiff=sum(diff(x$count))))
