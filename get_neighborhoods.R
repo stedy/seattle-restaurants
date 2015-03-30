@@ -1,3 +1,4 @@
+library(reshape)
 library(RSQLite)
 library(sp)
 
@@ -31,7 +32,14 @@ for(hood in my.sub$NAME){
   all.matches <- rbind(all.matches, temp.match)
 } 
 
-
 #then calculate statistics
 all.counts <- plyr::ddply(all.matches, c('neighborhood', 'NAICStype', 'entrydate'), function(x) data.frame(count=length(unique(x$Name))))
 all.diffs <- plyr::ddply(all.counts, c('neighborhood', 'NAICStype'), function(x) data.frame(absdiff=sum(diff(x$count))))
+
+all.diffs.wide <- melt(all.diffs, id.vars=c('neighborhood','NAICStype'))
+all.diffs.wide$absdiff <- NULL
+
+#Expand grid to account for neighborhoods with missing data
+expand.df <- expand.grid(neighborhood = unique(all.counts$neighborhood), NAICStype = unique(all.counts$NAICStype))
+
+all.diffs.wide <- merge(all.diffs.wide, expand.df, all.y=T)
