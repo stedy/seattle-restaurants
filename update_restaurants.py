@@ -38,7 +38,7 @@ def main():
 
     geolocator = OpenCage(api[0],
         domain='api.opencagedata.com',
-        scheme='https', timeout=10, proxies=None)
+        scheme='https', timeout=15, proxies=None)
 
     latlong = []
 
