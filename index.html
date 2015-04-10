@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<head>
+    <title>Add a tooltip on mouseover of neighborhood</title>
+    <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+</head>
+
+<div id="main-wrapper">
+
+    <div id="metrics">
+        <div id="instruct"><em>Select one or type of restaurant among selection.</em></div>
+        <div id="motor">
+            <h3>Restaurant Type</h3>
+            <ul>
+            <li data-metric="FSR_total" class="selected FSR_total">FSR</li>
+            <li data-metric="DP_total" class="selected DP_total">DP</li>
+            <li data-metric="MFS_total" class="selected MFS_total">MFS</li>
+            <li data-metric="LSR_total" class="selected LSR_total">LSR</li>
+            <li data-metric="Breweries_total" class="selected Breweries_total">Breweries</li>
+            </ul>
+        </div>
+
+    </div><!-- @end #metrics -->
+
+
+    <div id="tooltip" class="tooltip">
+        <h3 class="name"></h3>
+        <div data-metric="FSR_total" class="line">
+            <div class="FSR_total symbol"></div> FSR
+            <div class="FSR_total_val val"></div>
+        </div>
+        <div data-metric="DP_total" class="line">
+            <div class="DP_total symbol"></div> DP
+            <div class="DP_total_val val"></div>
+        </div>
+        <div data-metric="MFS_total" class="line">
+            <div class="MFS_total symbol"></div> MFS
+            <div class="MFS_total_val val"></div>
+        </div>
+        <div data-metric="LSR_total" class="line">
+            <div class="LSR_total symbol"></div> LSR
+            <div class="LSR_total_val val"></div>
+        </div>
+        <div data-metric="Breweries_total" class="line">
+            <div class="Breweries_total symbol"></div> Breweries
+            <div class="Breweries_total_val val"></div>
+        </div>
+    </div>
+</div><!-- @end #main-wrapper -->
+
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/queue.v1.min.js"></script>
+<script src="http://d3js.org/topojson.v1.min.js"></script>
+
+<script>
+var width = 960,
+    height = 1200,
+    center = [width / 2, height / 2],
+    defaultFill = "#e0e0e0";
+
+var restById = d3.map();
+
+var projection = d3.geo.albers()
+    .center([0,47.55])
+    .rotate([122.2,0])
+    .scale(171080)
+    .translate([width / 2, height / 2]);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+// Color scales
+var baseColors = {
+    "FSR_total": d3.scale.linear().domain([0,60]).range(["#E2F3F0", "#8dd3c7"]).interpolate(d3.interpolateLab),
+    "DP_total": d3.scale.linear().domain([0,20]).range(["#E2F3F0", "#bc80bd"]).interpolate(d3.interpolateLab),
+    "MFS_total": d3.scale.linear().domain([0,20]).range(["#E2F3F0", "#fb8072"]).interpolate(d3.interpolateLab),
+    "LSR_total": d3.scale.linear().domain([0,20]).range(["#E2F3F0", "#80b1d3"]).interpolate(d3.interpolateLab),
+    "Breweries_total": d3.scale.linear().domain([0,20]).range(["#E2F3F0", "#bebada"]).interpolate(d3.interpolateLab),
+};
+
+
+var svg = d3.select("body #main-wrapper").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+var g = svg.append("g");
+
+var tooltip = d3.select("#tooltip")
+ .attr("class", "tooltip")
+ .style("opacity", 0);
+
+var CURR_SELECT = ["FSR_total", "DP_total", "MFS_total", "LSR_total", "Breweries_total"];
+
+// Load data
+queue()
+    .defer(d3.json, "data/seattlepgrID.topojson")
+    .defer(d3.csv, "data/sncounts.csv", typeAndSet)
+    .await(ready);
+
+// After loading the data...
+function ready(error, us) {
+
+    // neighborhood borders
+    g.append("g")
+        .attr("class", "seattleneighborhoods")
+        .selectAll("path")
+          .data(topojson.feature(us, us.objects.seattleneighborhoods).features)
+        .enter().append("path")
+          .attr("d", path)
+
+          .on("mouseover", function(d) {
+                 d3.select(this).classed("selected", true);
+                 tooltip.transition().duration(100)
+                   .style("opacity", 1)
+                 if (d3.event.pageX > (width - 200)) {
+                     tooltip.style("left", (d3.event.pageX - 210) + "px");
+                 } else {
+                     tooltip.style("left", (d3.event.pageX + 20) + "px")
+                          .style("top", (d3.event.pageY -30) + "px");
+                 }
+                 if (d3.event.pageY > (height - 150)) {
+                     tooltip.style("top", (d3.event.pageY -140) + "px");
+                 } else {
+                     tooltip.style("top", (d3.event.pageY -30) + "px");
+                 }
+
+                 tooltip.select(".name").text(restById.get(d.id)["neighborhood"]);
+                 tooltip.select(".FSR_total_val.val").text(d3.round(restById.get(d.id)["FSR_total"]))
+                 tooltip.select(".DP_total_val.val").text(d3.round(restById.get(d.id)["DP_total"]))
+                 tooltip.select(".MFS_total_val.val").text(d3.round(restById.get(d.id)["MFS_total"]))
+                 tooltip.select(".LSR_total_val.val").text(d3.round(restById.get(d.id)["LSR_total"]))
+                 tooltip.select(".Breweries_total_val.val").text(d3.round(restById.get(d.id)["Breweries_total"]))
+
+               })
+            .on("mouseout", function() {
+                d3.select(this).classed("selected", false);
+                tooltip.transition().duration(300)
+                  .style("opacity", 0);
+                });
+
+    // Update neighborhood fill colors based on current selection
+    updateClasses();
+
+    // Make filter buttons interactive
+    d3.selectAll("#metrics li")
+        .on("click", function() {
+            var item = d3.select(this);
+            if (item.classed("selected")) {
+                item.attr("class", "");
+                removeFromArray(CURR_SELECT, item.attr("data-metric"));
+
+            } else {
+                item.classed("selected " + item.attr("data-metric"), true);
+                CURR_SELECT.push(item.attr("data-metric"));
+            }
+
+            updateClasses();
+        });
+
+}
+
+
+function updateClasses() {
+    svg.selectAll(".seattleneighborhoods path")
+        .attr("fill", function(d) { return colorByGreatest(d.id); });
+}
+
+
+function colorByGreatest(FIPS) {
+
+    var neighborhoodObject = restById.get(FIPS);
+
+    if (typeof neighborhoodObject !== "undefined") {
+        var values = [];
+        for (var i = 0; i < CURR_SELECT.length; i++) {
+            values.push(neighborhoodObject[CURR_SELECT[i]]);
+        }
+        var maxValue = d3.max(values);
+        var maxIndex = values.indexOf(maxValue);
+        var metric = CURR_SELECT[maxIndex];
+        return baseColors[metric](maxValue);
+    }
+
+    else {
+        return "#E2F3F0";
+    }
+
+}
+
+function typeAndSet(d) {
+    d.FSR_total = +d.FSR_total;
+    d.DP_total = +d.DP_total;
+    d.MFS_total = +d.MFS_total;
+    d.LSR_total = +d.LSR_total;
+    d.Breweries_total = +d.Breweries_total;
+    restById.set(d.FIPS, d);
+}
+
+// Removes values from an array
+function removeFromArray(arr) {
+    var what, a = arguments, L = a.length, ax;
+    while (L > 1 && arr.length) {
+        what = a[--L];
+        while ((ax= arr.indexOf(what)) !== -1) {
+            arr.splice(ax, 1);
+        }
+    }
+    return arr;
+}
+</script>

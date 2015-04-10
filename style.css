@@ -1,0 +1,95 @@
+/* Normalize */
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, p, blockquote, th, td, legend {
+	margin: 0;
+	padding: 0;
+}
+h1,h2,h3,h4,h5,h6 { font-family: Arial, Helvetica, sans-serif; font-weight: bold; font-size: 100%; }
+address, caption, cite, code, dfn, th, var { font-style: normal; font-weight: normal; }
+table { border-collapse: collapse; border-spacing: 0; }
+fieldset,img { border: 0; }
+caption,th { text-align: left; }
+/* @end */
+
+
+#main-wrapper {
+    width: 960px;
+    margin: 0 auto;
+}
+#metrics { width: 920px; margin: 0 auto 15px 0; font-family: Helvetica, sans-serif; }
+#metrics #instruct { 
+    text-align: left; 
+    margin-bottom: 10px;
+    margin-right: 20px; 
+    float: left; 
+    width: 210px; 
+    font-size: 14px; 
+    line-height: 1.4em;
+    font-family: Georgia, serif;
+}
+#metrics h3 { font-size: 13px; font-family: Helvetica, sans-serif; text-align: center; margin-bottom: 0; }
+#metrics ul { font-size: 12px; font-family: Helvetica, sans-serif; margin-left: 0; padding: 0; }
+#metrics ul li { 
+    list-style: none; 
+    margin: 10px 10px 0 0; 
+    padding: 4px 0; 
+    display: inline-block;
+    width: 108px;
+    /*background: #e0e0e0;*/
+    cursor: pointer;
+    text-align: center;
+    font-size: 11px;
+    border: 1px solid #e0e0e0;
+}
+#metrics ul li.bottom { margin-bottom: 0; }
+#metrics #motor { width: 250px; float: left; border-right: 1px solid #ccc; margin-right: 15px; }
+#metrics #non-motor { width: 250px; float: left; padding-left: 5px;  }
+#metrics .block-button { width: 80px; display: block; float:left; clear:both; }
+div.tooltip {
+    position: absolute;
+    text-align: left;
+    width: 170px;
+    padding: 10px;
+    font-size: 10px;
+    font-family: Helvetica, sans-serif;
+    background: #ffffff;
+    pointer-events: none;
+    opacity: 0;
+}
+div.tooltip h3 { 
+  font-size: 12px; margin: 0 0 7px 0; 
+  line-height: 1.2em;
+}
+div.tooltip .line { clear: both; margin-top: 3px; font-size: 11px; }
+div.tooltip .symbol { float: left; width: 6px; height: 6px; margin: 3px 4px 0 0; }
+div.tooltip .val { float: right; width: 25px; text-align: right; margin-right: 4px; }
+div.tooltip .moe { float: right; color: #aaa; width: 30px; text-align: right; }
+.overlay {
+  fill: none;
+  pointer-events: all;
+}
+.button { fill: #000; }
+.seattleneighborhoods {
+  fill: #e0e0e0;
+}
+.states {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+}
+
+.seattleneighborhoods path.selected {
+    stroke: #000;
+    stroke-width: 0.5px;
+}
+
+
+
+path.FSR, #metrics ul li.selected.FSR, .tooltip .FSR { fill: #8dd3c7; background: #8dd3c7; }
+path.DP, #metrics ul li.selected.DP, .tooltip .DP { fill: #bc80bd; background: #bc80bd; }
+path.Breweries, #metrics ul li.selected.Breweries, .tooltip .Breweries { fill: #bebada; background: #bebada; }
+path.MFS, #metrics ul li.selected.MFS, .tooltip .MFS { fill: #fb8072; background: #fb8072; }
+path.LSR, #metrics ul li.selected.LSR, .tooltip .LSR { fill: #80b1d3; background: #80b1d3; }
+path.NODATA { fill: #fff; }
+
+.clr { clear: both; }
