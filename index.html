@@ -41,8 +41,9 @@
  </div>
 </div>
 
-<div id="main-wrapper">
-
+<div class ="container">
+  <div class="row"
+ <div class="col-xs-6">
     <div id="metrics">
         <div id="motor">Select one or more type of restaurants among selections.
             <h3>Restaurant Type</h3>
@@ -54,9 +55,6 @@
             <li data-metric="Breweries_total" class="selected Breweries_total">Breweries</li>
             </ul>
         </div>
-
-    </div>
-
 
     <div id="tooltip" class="tooltip">
         <h3 class="name"></h3>
@@ -83,13 +81,14 @@
     </div>
 </div>
 
-
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="http://d3js.org/queue.v1.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 
+<div class="col-xs-6" id="main-map">
+
 <script>
-var width = 960,
+var width = 660,
     height = 1200,
     center = [width / 2, height / 2],
     defaultFill = "#e0e0e0";
@@ -98,7 +97,7 @@ var restById = d3.map();
 
 var projection = d3.geo.albers()
     .center([0,47.55])
-    .rotate([122.2,0])
+    .rotate([122.29,0])
     .scale(171080)
     .translate([width / 2, height / 2]);
 
@@ -115,7 +114,7 @@ var baseColors = {
 };
 
 
-var svg = d3.select("body #main-wrapper").append("svg")
+var svg = d3.select("#main-map").append("svg")
     .attr("width", width)
     .attr("height", height);
 
@@ -244,3 +243,7 @@ function removeFromArray(arr) {
     return arr;
 }
 </script>
+</div>
+</div>
+</div>
+</div>
