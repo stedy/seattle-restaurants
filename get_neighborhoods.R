@@ -57,6 +57,6 @@ names(total.counts) <- c("neighborhood","Breweries_total",
 
 writeout <- merge(total.counts, total.changes)
 writeout[is.na(writeout)] <- 0
-write.csv(writeout, "sncounts.csv", row.names=F)
+write.csv(writeout, "data/sncounts.csv", row.names=F)
 
 RSQLite::dbDisconnect(conn)

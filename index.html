@@ -1,25 +1,61 @@
 <!DOCTYPE html>
 <head>
-    <title>Add a tooltip on mouseover of neighborhood</title>
-    <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<title>Seattle Restaurants 2015</title>
+<link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-custom" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Changes in Seattle restaurants in 2015</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+      </ul>
+    </div>
+  </div>
+</nav>
+
 </head>
+
+
+<div class="container theme-showcase" role="main">
+  <div class="jumbotron">
+   <p>
+   <p>Seattle Restaurants is a project attempting to document changes in the Seattle restaurant scene in 2015.
+   Data comes via the <a href="http://www.seattle.gov/licenses/find-a-business">City of Seattle</a> and is plotted
+   on a map with shapefiles courtesy of <a href="http://www.zillow.com/blog/7000-neighborhood-boundary-files-in-shapefile-format-4653/">Zillow</a> using the <a href="https://github.com/mbostock/topojson/">D3 TopoJSON</a> library.
+   Restaurant classification is based on <a href="https://en.wikipedia.org/wiki/NAICS">NAICS</a> code.
+   </p>
+ </div>
+</div>
 
 <div id="main-wrapper">
 
     <div id="metrics">
-        <div id="instruct"><em>Select one or type of restaurant among selection.</em></div>
-        <div id="motor">
+        <div id="motor">Select one or more type of restaurants among selections.
             <h3>Restaurant Type</h3>
             <ul>
-            <li data-metric="FSR_total" class="selected FSR_total">FSR</li>
-            <li data-metric="DP_total" class="selected DP_total">DP</li>
-            <li data-metric="MFS_total" class="selected MFS_total">MFS</li>
-            <li data-metric="LSR_total" class="selected LSR_total">LSR</li>
+            <li data-metric="FSR_total" class="selected FSR_total">Full Service Restaurant</li>
+            <li data-metric="DP_total" class="selected DP_total">Drinking Places</li>
+            <li data-metric="MFS_total" class="selected MFS_total">Mobile Food Services</li>
+            <li data-metric="LSR_total" class="selected LSR_total">Limited Service Restaurants</li>
             <li data-metric="Breweries_total" class="selected Breweries_total">Breweries</li>
             </ul>
         </div>
 
-    </div><!-- @end #metrics -->
+    </div>
 
 
     <div id="tooltip" class="tooltip">
@@ -45,7 +81,7 @@
             <div class="Breweries_total_val val"></div>
         </div>
     </div>
-</div><!-- @end #main-wrapper -->
+</div>
 
 
 <script src="http://d3js.org/d3.v3.min.js"></script>
