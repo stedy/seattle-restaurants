@@ -75,7 +75,7 @@ div.tooltip h3 {
 div.tooltip .line { clear: both; margin-top: 3px; font-size: 11px; }
 div.tooltip .symbol { float: left; width: 6px; height: 6px; margin: 3px 4px 0 0; }
 div.tooltip .val { float: right; width: 25px; text-align: right; margin-right: 4px; }
-div.tooltip .moe { float: right; color: #aaa; width: 30px; text-align: right; }
+div.tooltip .chg { float: right; color: #aaa; width: 30px; text-align: right; }
 .overlay {
   fill: none;
   pointer-events: all;
@@ -84,25 +84,17 @@ div.tooltip .moe { float: right; color: #aaa; width: 30px; text-align: right; }
 .seattleneighborhoods {
   fill: #e0e0e0;
 }
-.states {
-  fill: none;
-  stroke: #fff;
-  stroke-width: 1.5px;
-  stroke-linejoin: round;
-}
 
 .seattleneighborhoods path.selected {
     stroke: #000;
     stroke-width: 0.5px;
 }
 
-
-
-path.FSR, #metrics ul li.selected.FSR, .tooltip .FSR { fill: #8dd3c7; background: #8dd3c7; }
-path.DP, #metrics ul li.selected.DP, .tooltip .DP { fill: #bc80bd; background: #bc80bd; }
-path.Breweries, #metrics ul li.selected.Breweries, .tooltip .Breweries { fill: #bebada; background: #bebada; }
-path.MFS, #metrics ul li.selected.MFS, .tooltip .MFS { fill: #fb8072; background: #fb8072; }
-path.LSR, #metrics ul li.selected.LSR, .tooltip .LSR { fill: #80b1d3; background: #80b1d3; }
+path.FSR_total, #metrics ul li.selected.FSR_total, .tooltip .FSR_total { fill: #8dd3c7; background: #8dd3c7; }
+path.DP_total, #metrics ul li.selected.DP_total, .tooltip .DP_total { fill: #bc80bd; background: #bc80bd; }
+path.Breweries_total, #metrics ul li.selected.Breweries_total, .tooltip .Breweries_total { fill: #bebada; background: #bebada; }
+path.MFS_total, #metrics ul li.selected.MFS_total, .tooltip .MFS_total { fill: #fb8072; background: #fb8072; }
+path.LSR_total, #metrics ul li.selected.LSR_total, .tooltip .LSR_total { fill: #80b1d3; background: #80b1d3; }
 path.NODATA { fill: #fff; }
 
 .clr { clear: both; }

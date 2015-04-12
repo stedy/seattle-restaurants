@@ -4,8 +4,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="">
-<meta name="author" content="">
 <title>Seattle Restaurants 2015</title>
 <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
@@ -60,22 +58,27 @@
         <h3 class="name"></h3>
         <div data-metric="FSR_total" class="line">
             <div class="FSR_total symbol"></div> FSR
+            <div class="FSR_total_val chg"></div>
             <div class="FSR_total_val val"></div>
         </div>
         <div data-metric="DP_total" class="line">
             <div class="DP_total symbol"></div> DP
+            <div class="DP_total_val chg"></div>
             <div class="DP_total_val val"></div>
         </div>
         <div data-metric="MFS_total" class="line">
             <div class="MFS_total symbol"></div> MFS
+            <div class="MFS_total_val chg"></div>
             <div class="MFS_total_val val"></div>
         </div>
         <div data-metric="LSR_total" class="line">
             <div class="LSR_total symbol"></div> LSR
+            <div class="LSR_total_val chg"></div>
             <div class="LSR_total_val val"></div>
         </div>
         <div data-metric="Breweries_total" class="line">
             <div class="Breweries_total symbol"></div> Breweries
+            <div class="Breweries_total_val chg"></div>
             <div class="Breweries_total_val val"></div>
         </div>
     </div>
@@ -166,6 +169,12 @@ function ready(error, us) {
                  tooltip.select(".LSR_total_val.val").text(d3.round(restById.get(d.id)["LSR_total"]))
                  tooltip.select(".Breweries_total_val.val").text(d3.round(restById.get(d.id)["Breweries_total"]))
 
+                 tooltip.select(".FSR_total_val.chg").text(restById.get(d.id)["FSR_change"])
+                 tooltip.select(".DP_total_val.chg").text(restById.get(d.id)["DP_change"])
+                 tooltip.select(".MFS_total_val.chg").text(restById.get(d.id)["MFS_change"])
+                 tooltip.select(".LSR_total_val.chg").text(restById.get(d.id)["LSR_change"])
+                 tooltip.select(".Breweries_total_val.chg").text(restById.get(d.id)["Breweries_change"])
+
                })
             .on("mouseout", function() {
                 d3.select(this).classed("selected", false);
@@ -228,6 +237,11 @@ function typeAndSet(d) {
     d.MFS_total = +d.MFS_total;
     d.LSR_total = +d.LSR_total;
     d.Breweries_total = +d.Breweries_total;
+
+    d.FSR_change = +d.FSR_change;
+    d.DP_change = +d.DP_change;
+    d.MFS_change = +d.MFS_change;
+    d.LSR_change = +d.LSR_change;
     restById.set(d.FIPS, d);
 }
 
