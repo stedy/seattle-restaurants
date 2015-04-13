@@ -43,15 +43,29 @@ def main():
     latlong = []
 
     for name, place in zip(names, address):
-        location = geolocator.geocode(place + " Seattle, WA")
-        latlong.append(location.latitude)
-        print name
-        print (location.latitude, location.longitude)
-        cur.execute("""INSERT into Restaurants (Name, Latitude,
-                        Longitude, NAICStype, entrydate) VALUES (?,?,?,?,?)""",
+        query = cur.execute("""SELECT Count(*) FROM
+                Addresses WHERE Name = ? AND Address = ?""",
+                [str(name), str(place)])
+        data = query.fetchone()[0]
+        if data == 0:
+            location = geolocator.geocode(place + " Seattle, WA")
+            latlong.append(location.latitude)
+            
+            print(name)
+            print (location.latitude, location.longitude)
+            cur.execute("""INSERT into Addresses (Name, Latitude,
+                        Longitude, NAICStype, Address) VALUES (?,?,?,?,?)""",
                 [name, location.latitude, location.longitude, NAICStype,
-                    filedate])
-        db.commit()
+                    place])
+            cur.execute("""INSERT INTO Dates (Name, Address,
+                    Entrydate) VALUES (?,?,?)""",
+                [name, place, filedate])
+            db.commit()
+        if data > 0:
+            cur.execute("""INSERT INTO Dates (Name, Address,
+                    entrydate) VALUES (?,?,?)""",
+                [name, place, filedate])
+            db.commit()
 
 if __name__ == '__main__':
     main()

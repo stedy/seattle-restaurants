@@ -1,8 +1,14 @@
-DROP TABLE IF EXISTS Restaurants;
-CREATE TABLE Restaurants(
+DROP TABLE IF EXISTS Addresses;
+CREATE TABLE Addresses(
   ID integer PRIMARY KEY,
   Name text,
   Latitude text,
   Longitude text,
   NAICStype text,
-  entrydate text);
+  Address text);
+
+DROP TABLE IF EXISTS Dates;
+CREATE TABLE Dates(
+  Name text,
+  Address text,
+  Entrydate text);
