@@ -16,6 +16,7 @@ def main():
 
     url = args.raw_html
     db = sqlite3.connect(args.db)
+    db.text_factory = str
     cur = db.cursor()
 
     page = file(url).read()

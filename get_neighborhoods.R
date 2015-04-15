@@ -6,12 +6,17 @@ conn <- RSQLite::dbConnect(SQLite(), "restaurants.db")
 wa.map <- rgdal::readOGR("zillow/ZillowNeighborhoods-WA.shp", layer="ZillowNeighborhoods-WA")
 my.sub <- wa.map[wa.map$CITY == "Seattle", ]
 
-res <- RSQLite::dbGetQuery(conn, "SELECT * FROM Restaurants")
+res.addresses <- RSQLite::dbGetQuery(conn, "SELECT * FROM Addresses")
+res.addresses <- res.addresses[!duplicated(res.addresses), ]
+res.dates <- RSQLite::dbGetQuery(conn, "SELECT * FROM Dates")
+res.dates <- res.dates[!duplicated(res.dates), ]
 
-df.points <- res[c('Latitude', 'Longitude')]
+res <- merge(res.addresses, res.dates)
+
+df.points <- res[c('Name', 'Latitude', 'Longitude')]
+df.points <- df.points[!duplicated(df.points), ]
 df.points$Latitude <- as.numeric(df.points$Latitude)
 df.points$Longitude <- as.numeric(df.points$Longitude)
-df.points$Name <- res$Name
 
 sp::coordinates(df.points) <- ~ Longitude + Latitude 
 
@@ -21,7 +26,7 @@ for(hood in my.sub$NAME){
   proj4string(df.points) <- proj4string(temp)
   temp.over <- over(df.points, temp)
   
-  temp.match <- cbind(res, temp.over)
+  temp.match <- cbind(df.points, temp.over)
   temp.match <- temp.match[complete.cases(temp.match$NAME), ]
   if(nrow(temp.match) == 0){
     next
@@ -31,7 +36,8 @@ for(hood in my.sub$NAME){
 } 
 
 #then calculate statistics
-all.counts <- plyr::ddply(all.matches, c('neighborhood', 'NAICStype', 'entrydate'), function(x) data.frame(count=length(unique(x$Name))))
+all.matches <- merge(res, all.matches)
+all.counts <- plyr::ddply(all.matches, c('neighborhood', 'NAICStype', 'Entrydate'), function(x) data.frame(count=length(unique(x$Name))))
 all.diffs <- plyr::ddply(all.counts, c('neighborhood', 'NAICStype'), function(x) data.frame(absdiff=sum(diff(x$count))))
 
 all.diffs.wide <- melt(all.diffs, id.vars=c('neighborhood','NAICStype'))
