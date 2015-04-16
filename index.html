@@ -31,7 +31,7 @@
 <div class="container theme-showcase" role="main">
   <div class="jumbotron">
    <p>
-   <p>Seattle Restaurants is a project attempting to document changes in the Seattle restaurant scene in 2015.
+   <p>Seattle Restaurants is an attempt to document changes in the Seattle restaurant scene year to date in 2015.
    Data comes via the <a href="http://www.seattle.gov/licenses/find-a-business">City of Seattle</a> and is plotted
    on a map with shapefiles courtesy of <a href="http://www.zillow.com/blog/7000-neighborhood-boundary-files-in-shapefile-format-4653/">Zillow</a> using the <a href="https://github.com/mbostock/topojson/">D3 TopoJSON</a> library.
    Restaurant classification is based on <a href="https://en.wikipedia.org/wiki/NAICS">NAICS</a> code.
@@ -43,7 +43,7 @@
   <div class="row"
  <div class="col-xs-6">
     <div id="metrics">
-        <div id="motor">
+        <div id="motor" class="col-xs-4">
             <h3>Restaurant Type</h3>
             <ul>
             <li data-metric="FSR_total" class="selected FSR_total">Full Service Restaurants</li>
@@ -53,7 +53,7 @@
             <li data-metric="Breweries_total" class="selected Breweries_total">Breweries</li>
             </ul>
             Use the above buttons to select restaurant type.
-            Number in black is total number of restaurants by type in that neighborhood. Number in grey is change in restaurant count thus far in 2015.
+            Number in black is total number of restaurants by type in that neighborhood. Number in grey is net change in restaurant count year to date in 2015.
         </div>
 
     <div id="tooltip" class="tooltip">
@@ -90,18 +90,18 @@
 <script src="http://d3js.org/queue.v1.min.js"></script>
 <script src="http://d3js.org/topojson.v1.min.js"></script>
 
-<div class="col-xs-6" id="main-map">
+<div class="col-xs-4" id="main-map">
 
 <script>
-var width = 660,
-    height = 1200,
+var width = 800,
+    height = 850,
     center = [width / 2, height / 2],
     defaultFill = "#e0e0e0";
 
 var restById = d3.map();
 
 var projection = d3.geo.albers()
-    .center([0,47.55])
+    .center([0,47.60])
     .rotate([122.29,0])
     .scale(171080)
     .translate([width / 2, height / 2]);
@@ -263,3 +263,10 @@ function removeFromArray(arr) {
 </div>
 </div>
 </div>
+
+<div id="footer">
+        <div class="container">
+                  <p class="muted credit">Created by <a href="http://zachstednick.com">Zach Stednick</a></p>
+        </div>
+</div>
+</body>

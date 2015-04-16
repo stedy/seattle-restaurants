@@ -29,8 +29,6 @@ caption,th { text-align: left; }
   font-size:28px;
 }
 
-.jumbotron-custom {
-    
 
 #metrics { width: 920px; margin: 0 auto 15px 0; font-family: Helvetica, sans-serif; }
 #metrics #instruct {
@@ -48,7 +46,7 @@ caption,th { text-align: left; }
 #metrics ul { font-size: 12px; font-family: Helvetica, sans-serif; margin-left: 0; padding: 0; }
 #metrics ul li {
     list-style: none;
-    margin: 10px 10px 0 0;
+    margin: 10px 4px 0 0;
     padding: 4px 0;
     display: inline-block;
     width: 278px;
@@ -65,21 +63,21 @@ div.tooltip {
     position: absolute;
     text-align: left;
     width: 170px;
-    padding: 10px;
-    font-size: 10px;
+    padding: 5px;
+    font-size: 20px;
     font-family: Helvetica, sans-serif;
     background: #ffffff;
     pointer-events: none;
     opacity: 0;
 }
 div.tooltip h3 { 
-  font-size: 12px; margin: 0 0 7px 0; 
+  font-size: 12px; margin: 0 0 3px 0; 
   line-height: 1.2em;
 }
 div.tooltip .line { clear: both; margin-top: 3px; font-size: 11px; }
 div.tooltip .symbol { float: left; width: 6px; height: 6px; margin: 3px 4px 0 0; }
-div.tooltip .val { float: right; width: 25px; text-align: right; margin-right: 4px; }
-div.tooltip .chg { float: right; color: #aaa; width: 30px; text-align: right; }
+div.tooltip .val { float: right; width: 15px; text-align: right; margin-right: 4px; }
+div.tooltip .chg { float: right; color: #aaa; width: 20px; text-align: right; }
 .overlay {
   fill: none;
   pointer-events: all;
@@ -102,3 +100,24 @@ path.LSR_total, #metrics ul li.selected.LSR_total, .tooltip .LSR_total { fill: #
 path.NODATA { fill: #fff; }
 
 .clr { clear: both; }
+
+html {
+    position: relative;
+      min-height: 100%;
+    }
+    body {
+        /* Margin bottom by footer height */
+        margin-bottom: 60px;
+      }
+      .footer {
+          position: absolute;
+          bottom: 0;
+          margin-left: -20px;
+          margin-right: -20px;
+          padding-left: 20px;
+          padding-right: 20px;
+          width: 100%;
+          /* Set the fixed height of the footer here */
+          height: 60px;
+          background-color: #f5f5f5;
+     }
