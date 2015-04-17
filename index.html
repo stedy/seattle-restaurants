@@ -34,7 +34,7 @@
    <p>Seattle Restaurants is an attempt to document changes in the Seattle restaurant scene year to date in 2015.
    Data comes via the <a href="http://www.seattle.gov/licenses/find-a-business">City of Seattle</a> and is plotted
    on a map with shapefiles courtesy of <a href="http://www.zillow.com/blog/7000-neighborhood-boundary-files-in-shapefile-format-4653/">Zillow</a> using the <a href="https://github.com/mbostock/topojson/">D3 TopoJSON</a> library.
-   Restaurant classification is based on <a href="https://en.wikipedia.org/wiki/NAICS">NAICS</a> code.
+   Restaurant classification is based on <a href="https://en.wikipedia.org/wiki/NAICS">NAICS</a> code. More details in this <a href="http://zachstednick.name/blog/2015/04/17/seattle-restaurant-changes/">blog post</a>.
    </p>
  </div>
 </div>
@@ -111,11 +111,11 @@ var path = d3.geo.path()
 
 // Color scales
 var baseColors = {
-    "FSR_total": d3.scale.linear().domain([0,60]).range(["#E2F3F0", "#8dd3c7"]).interpolate(d3.interpolateLab),
+    "FSR_total": d3.scale.linear().domain([0,80]).range(["#E2F3F0", "#8dd3c7"]).interpolate(d3.interpolateLab),
     "DP_total": d3.scale.linear().domain([0,20]).range(["#E2F3F0", "#bc80bd"]).interpolate(d3.interpolateLab),
     "MFS_total": d3.scale.linear().domain([0,20]).range(["#E2F3F0", "#fb8072"]).interpolate(d3.interpolateLab),
-    "LSR_total": d3.scale.linear().domain([0,20]).range(["#E2F3F0", "#80b1d3"]).interpolate(d3.interpolateLab),
-    "Breweries_total": d3.scale.linear().domain([0,20]).range(["#E2F3F0", "#bebada"]).interpolate(d3.interpolateLab),
+    "LSR_total": d3.scale.linear().domain([0,80]).range(["#E2F3F0", "#80b1d3"]).interpolate(d3.interpolateLab),
+    "Breweries_total": d3.scale.linear().domain([0,10]).range(["#E2F3F0", "#bebada"]).interpolate(d3.interpolateLab),
 };
 
 
