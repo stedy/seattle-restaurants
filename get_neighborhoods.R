@@ -1,20 +1,23 @@
 library(reshape)
 library(sp)
+library(RSQLite)
+library(dplyr)
 
-conn <- RSQLite::dbConnect(SQLite(), "restaurants.db")
+conn <- dbConnect(SQLite(), "restaurants.db")
 
 wa.map <- rgdal::readOGR("zillow/ZillowNeighborhoods-WA.shp", layer="ZillowNeighborhoods-WA")
 my.sub <- wa.map[wa.map$CITY == "Seattle", ]
 
-res.addresses <- RSQLite::dbGetQuery(conn, "SELECT * FROM Addresses")
-res.addresses <- res.addresses[!duplicated(res.addresses), ]
-res.dates <- RSQLite::dbGetQuery(conn, "SELECT * FROM Dates")
-res.dates <- res.dates[!duplicated(res.dates), ]
+res.addresses <- dbGetQuery(conn, "SELECT * FROM Addresses") %>% distinct
+res.dates <- dbGetQuery(conn, "SELECT * FROM Dates") %>% distinct
 
 res <- merge(res.addresses, res.dates)
 
-df.points <- res[c('Name', 'Latitude', 'Longitude')]
-df.points <- df.points[!duplicated(df.points), ]
+df.points <- 
+  res %>% 
+  select(Name, Latitude, Longitude) %>%
+  distinct
+
 df.points$Latitude <- as.numeric(df.points$Latitude)
 df.points$Longitude <- as.numeric(df.points$Longitude)
 
