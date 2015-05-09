@@ -1,6 +1,7 @@
 *.csv
 *.db
 *.Rhistory
+*.png
 *.pyc
 raw_data
 zillow
