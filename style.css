@@ -100,6 +100,19 @@ path.NODATA { fill: #fff; }
 
 .clr { clear: both; }
 
+
+rect.bordered {
+    stroke: #E6E6E6;
+    stroke-width:2px;
+}
+
+ text {
+    font-size: 13pt;
+    font-family: Helvetica;
+}
+
+
+
 html {
     position: relative;
       min-height: 100%;

@@ -3,6 +3,7 @@ library(sp)
 library(RSQLite)
 library(dplyr)
 library(grid)
+library(RColorBrewer)
 
 conn <- dbConnect(SQLite(), "restaurants.db")
 
@@ -77,16 +78,18 @@ names(total.changes) <- c("neighborhood", "Breweries", "Mobile Food Services",
                          "Limited Service Restaurants")
 for.heatmap <- melt(total.changes)
 names(for.heatmap) <- c("Neighborhood", "Classification", "value")
-for.heatmap$Neighborhood <- factor(for.heatmap$Neighborhood, levels=rev(unique(for.heatmap$Neighborhood)), ordered = T)
-png("heatmap.png", width = 960, height = 1180, units = "px")
-ggplot(for.heatmap, aes(y = Neighborhood, x = Classification, fill = value)) + 
-       geom_tile() + scale_fill_gradient("Net change", low="red", high="green") + 
-       theme(axis.text.x = element_text(face='bold', size=14, angle = -45, hjust = 0),
-             axis.text.y = element_text(face='bold', size=14),
-             axis.title.x = element_text(face='bold', size=18),
-             axis.title.y = element_text(face='bold', size=18),
-             legend.key.width = unit(2.5, "cm"),
-             legend.key.height = unit(2.5, "cm"),
-             legend.text = element_text(face='bold', size=18),
-             legend.title = element_text(face='bold', size=18))
-dev.off()
+
+values <- unique(as.numeric(for.heatmap$value))
+
+pos.palate <- brewer.pal(length(which(values > 0)), "Greens")
+neg.palate <- brewer.pal(length(which(values < 0)), "Reds")
+
+colors.df <- data.frame(value=values[order(values)],
+                 colors = c(rev(neg.palate),"#FFFFFF", pos.palate, "#D3D3D3"))
+
+final2 <- merge(final, colors.df, all.x=T)
+final2 <- final2[c('num', 'class', 'value', 'colors')]
+final2$colors[is.na(final2$colors)] <- "#D3D3D3"
+final2$value <- ifelse(final2$value =="", "no data", final2$value)
+names(final2) <- c("Neighborhood", "Classification", "value", "Color")
+write.csv(final2, 'heatmap_num.csv', row.names=F, quote=F)

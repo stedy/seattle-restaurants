@@ -1,12 +1,14 @@
-<!DOCTYPE html>
 <head>
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Seattle Restaurants 2015</title>
-<link rel="stylesheet" href="style.css" type="text/css" media="screen" />
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css" type="text/css" media="screen" />
+
+<script src="http://d3js.org/d3.v3.js"></script>
+<script src="neighborhoods.js"></script>
 
 <!-- Fixed navbar -->
 <nav class="navbar navbar-custom" role="navigation">
@@ -30,23 +32,83 @@
 
 <div class="container theme-showcase" role="main">
   <div class="jumbotron">
-   <p>
-   <p>Seattle Restaurants is an attempt to document changes in the Seattle restaurant scene year to date in 2015. The figure below shows the five different restaurant
-   classifications of interest with overall net change in permits issued and stratified by neighborhood. Grey is missing data.
-   </p>
- </div>
-  <img src="heatmap.png"></img>
+  <p>
+  <p>Seattle Restaurants is an attempt to document changes in the Seattle restaurant scene year to date in 2015. The figure below shows the five different restaurant
+classifications of interest with overall net change in permits issued and stratified by neighborhood. Mouseover each cell for more info, grey is missing data.
+  </p>
+  </div>
 </div>
 
+</head>
+<body>
+  <div id="chart" style="margin-left: 300px;">
 
-</div>
-</div>
-</div>
-</div>
+  <script type="text/javascript">
+    var margin = { top: 50, right: 0, bottom: 100, left: 160 },
+        width = 1400 - margin.left - margin.right,
+        height = 4200 - margin.top - margin.bottom,
+        gridSize = Math.floor(width / 6),
+        legendElementWidth = gridSize,
+        NAICS_list = ["Breweries", "Drinking Places", "Mobile Food Service", "Limited Service Restaurant", "Full Service Restaurant"];
 
+    d3.csv("heatmap_num.csv",
+				function(d) {
+				return {
+				NAICS: +d.Classification,
+				neighborhood: +d.Neighborhood,
+				value: d.value,
+			  color: d.Color	
+        };},
+
+				function(error, data) {
+				
+				var svg = d3.select("#chart").append("svg")
+				.attr("width", width + 100 + margin.left + margin.right)
+				.attr("height", height + margin.top + margin.bottom)
+				.append("g")
+				.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+				
+				var NAICSLabels = svg.selectAll(".NAICSLabel")
+				.data(neighborhoods)
+				.enter().append("text")
+				.text(function (d) { return d; })
+				.attr("x", 0)
+				.attr("y", function (d, i) { return i * gridSize / 4; })
+				.style("text-anchor", "end")
+				.attr("transform", "translate(-6," + gridSize / 4.3 + ")")
+				
+				var NAICSLabels = svg.selectAll(".NAICSLabel")
+				.data(NAICS_list)
+				.enter().append("text")
+				.text(function(d) { return d; })
+				.attr("x", function(d, i) { return i * gridSize; })
+				.attr("y", 0)
+				.style("text-anchor", "middle")
+				.attr("transform", "translate(" + gridSize / 2 + ", -6)")
+				
+				var heatMap = svg.selectAll(".neighborhood")
+				.data(data)
+        .enter().append("rect")
+				.attr("x", function(d) { return (d.NAICS - 1) * gridSize; })
+				.attr("y", function(d) { return (d.neighborhood - 1) * gridSize/4; })
+				.attr("rx", 4)
+				.attr("ry", 4)
+				.attr("class", "neighborhood bordered")
+				.attr("width", gridSize)
+				.attr("height", gridSize/4)
+        .style("fill", function(d) { return d.color; })
+        .append("title").text(function(d) { return "Net change of " + d.value +
+            " for " + NAICS_list[d.NAICS - 1] + " in " + neighborhoods[d.neighborhood - 1]; });
+				
+				});
+
+</script>
+</div>
 <div id="footer">
-        <div class="container">
-                  <p class="muted credit">Created by <a href="http://zachstednick.com">Zach Stednick</a></p>
-        </div>
+  <div class="container">
+    <p class="muted credit">Created by <a href="http://zachstednick.com">Zach Stednick</a></p>
+  </div>
 </div>
+
 </body>
+</html>
