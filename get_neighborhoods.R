@@ -78,6 +78,8 @@ names(total.changes) <- c("neighborhood", "Breweries", "Mobile Food Services",
                          "Limited Service Restaurants")
 for.heatmap <- melt(total.changes)
 names(for.heatmap) <- c("Neighborhood", "Classification", "value")
+for.heatmap$num <- as.numeric(factor(for.heatmap$Neighborhood))
+for.heatmap$class <- as.numeric(factor(for.heatmap$Classification))
 
 values <- unique(as.numeric(for.heatmap$value))
 
@@ -87,7 +89,7 @@ neg.palate <- brewer.pal(length(which(values < 0)), "Reds")
 colors.df <- data.frame(value=values[order(values)],
                  colors = c(rev(neg.palate),"#FFFFFF", pos.palate, "#D3D3D3"))
 
-final2 <- merge(final, colors.df, all.x=T)
+final2 <- merge(for.heatmap, colors.df, all.x=T)
 final2 <- final2[c('num', 'class', 'value', 'colors')]
 final2$colors[is.na(final2$colors)] <- "#D3D3D3"
 final2$value <- ifelse(final2$value =="", "no data", final2$value)

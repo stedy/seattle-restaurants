@@ -4,6 +4,7 @@ import argparse
 import sqlite3
 import os
 from geopy.geocoders import OpenCage
+from HTMLParser import HTMLParser
 
 def main():
     """Script to load data for processing HTML results for NAICS restaurant
@@ -39,14 +40,16 @@ def main():
 
     geolocator = OpenCage(api[0],
         domain='api.opencagedata.com',
-        scheme='https', timeout=15, proxies=None)
+        scheme='https', timeout=25, proxies=None)
+
+    h = HTMLParser()
 
     latlong = []
 
     for name, place in zip(names, address):
         query = cur.execute("""SELECT Count(*) FROM
                 Addresses WHERE Name = ? AND Address = ?""",
-                [str(name), str(place)])
+                [h.unescape(str(name)), str(place)])
         data = query.fetchone()[0]
         if data == 0:
             location = geolocator.geocode(place + " Seattle, WA")

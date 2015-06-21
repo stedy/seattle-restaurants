@@ -51,7 +51,7 @@ classifications of interest with overall net change in permits issued and strati
         legendElementWidth = gridSize,
         NAICS_list = ["Breweries", "Drinking Places", "Mobile Food Service", "Limited Service Restaurant", "Full Service Restaurant"];
 
-    d3.csv("heatmap_num.csv",
+    d3.csv("data/heatmap_num.csv",
 				function(d) {
 				return {
 				NAICS: +d.Classification,
