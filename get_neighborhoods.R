@@ -66,8 +66,8 @@ names(total.counts) <- c("neighborhood","Breweries_total",
                           "MFS_total", "DP_total", "FSR_total",
                           "LSR_total", "FIPS")
 
-writeout <- merge(total.counts, total.changes)
-writeout[is.na(writeout)] <- 0
+writeout <- merge(total.counts, total.changes) %>%
+  replace(is.na(.), 0)
 write.csv(writeout, "data/sncounts.csv", row.names=F)
 
 RSQLite::dbDisconnect(conn)
@@ -89,9 +89,10 @@ neg.palate <- brewer.pal(length(which(values < 0)), "Reds")
 colors.df <- data.frame(value=values[order(values)],
                  colors = c(rev(neg.palate),"#FFFFFF", pos.palate, "#D3D3D3"))
 
-final2 <- merge(for.heatmap, colors.df, all.x=T)
-final2 <- final2[c('num', 'class', 'value', 'colors')]
-final2$colors[is.na(final2$colors)] <- "#D3D3D3"
-final2$value <- ifelse(final2$value =="", "no data", final2$value)
-names(final2) <- c("Neighborhood", "Classification", "value", "Color")
-write.csv(final2, 'heatmap_num.csv', row.names=F, quote=F)
+final.for.heatmap <- merge(for.heatmap, colors.df, all.x=T) %>%
+  select(num, class, value, colors) %>%
+  replace(is.na(colors), "#D3D3D3")
+
+final.for.heatmap$value <- ifelse(final.for.heatmap$value =="", "no data", final.for.heatmap$value)
+names(final.for.heatmap) <- c("Neighborhood", "Classification", "value", "Color")
+write.csv(final.for.heatmap, 'heatmap_num.csv', row.names=F, quote=F)
