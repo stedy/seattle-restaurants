@@ -40,7 +40,7 @@ def main():
 
     geolocator = OpenCage(api[0],
         domain='api.opencagedata.com',
-        scheme='https', timeout=25, proxies=None)
+        scheme='https', timeout=45, proxies=None)
 
     h = HTMLParser()
 

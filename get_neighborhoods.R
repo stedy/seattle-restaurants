@@ -95,4 +95,4 @@ final.for.heatmap <- merge(for.heatmap, colors.df, all.x=T) %>%
 
 final.for.heatmap$value <- ifelse(final.for.heatmap$value =="", "no data", final.for.heatmap$value)
 names(final.for.heatmap) <- c("Neighborhood", "Classification", "value", "Color")
-write.csv(final.for.heatmap, 'heatmap_num.csv', row.names=F, quote=F)
+write.csv(final.for.heatmap, 'data/heatmap_num.csv', row.names=F, quote=F)
